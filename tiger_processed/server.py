@@ -62,29 +62,34 @@ async def find_tiles(bounds: Dict):
             bounds['east'],
             bounds['north']
         )
-        #logger.debug(f"Viewport bounds: {viewport.bounds}")
+
+        logger.info(f"Searching viewport: {viewport.bounds}")
 
         # Find intersecting tiles
         matching_tiles = []
+        intersecting_count = 0
+        missing_count = 0
+
         for code, geometry in tile_index.items():
-            #logger.debug(f"Testing tile {code}")
-            #logger.debug(f"Tile bounds: {geometry.bounds}")
             if geometry.intersects(viewport):
-                logger.debug(f"Tile {code} intersects!")
+                intersecting_count += 1
                 filename = f"tl_2023_01001_roads.{code}.topojson"
                 file_path = Path("ROADS") / filename
+
                 if file_path.exists():
                     matching_tiles.append(filename)
-                    logger.debug(f"Added {filename} to results")
                 else:
-                    logger.warning(f"File not found: {filename}")
+                    missing_count += 1
+                    # Log every 100th missing file to avoid spam
+                    if missing_count % 100 == 0:
+                        logger.warning(f"Missing files count: {missing_count}")
+                        logger.warning(f"Sample missing file: {file_path.absolute()}")
 
-        logger.info(f"Found {len(matching_tiles)} tiles for bounds: {bounds}")
-        if len(matching_tiles) == 0:
-            # Log all tile bounds for debugging
-            logger.debug("All tile bounds:")
-            for code, geom in tile_index.items():
-                logger.debug(f"{code}: {geom.bounds}")
+        logger.info(f"Summary: Found {len(matching_tiles)} files out of {intersecting_count} intersecting tiles")
+        if len(matching_tiles) > 0:
+            logger.info(f"Sample found file: {matching_tiles[0]}")
+        if missing_count > 0:
+            logger.warning(f"Total missing files: {missing_count}")
 
         return matching_tiles
 
