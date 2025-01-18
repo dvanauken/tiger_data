@@ -125,6 +125,9 @@ dmypy.json
 .jupyterlab-debug.log
 
 # TopoJSON files in specific directory
-tiger_processed/ROADS/*.topojson
+tiger_processed/**
+tiger_processed_001_20250107/**
+tiger_processed_20250115/**
+tiger_processed/**
 
 result.*.txt

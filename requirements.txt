@@ -7,3 +7,6 @@ fastapi>=0.68.0
 uvicorn>=0.15.0
 pygeohash>=1.2.0
 shapely>=1.8.0
+streamlit>=1.24.0
+folium>=0.14.0
+streamlit-folium>=0.13.0

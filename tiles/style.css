@@ -1,0 +1,30 @@
+/* Reset default margins */
+body {
+  margin: 0;
+}
+
+/* Map container */
+#map {
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Road features */
+.roads {
+  stroke: black;
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1;
+}
+
+/* Background map */
+.background {
+  fill: #f0f0f0;
+}
+
+/* Tile boundaries */
+.tile-boundary {
+  fill: none;
+  stroke: #666;
+  stroke-width: 0.5px;
+}

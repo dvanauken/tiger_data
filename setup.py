@@ -16,7 +16,17 @@ setup(
         'fastapi>=0.68.0',
         'uvicorn>=0.15.0',
         'pygeohash>=1.2.0',
-        'shapely>=1.8.0'
+        'shapely>=1.8.0',
+        # Viewer dependencies
+        'streamlit>=1.24.0',
+        'folium>=0.14.0',
+        'streamlit-folium>=0.13.0',
+        'PyYAML>=6.0'  # Add this line
     ],
     python_requires='>=3.7',
+    entry_points={
+        'console_scripts': [
+            'tiger-viewer=tiger_viewer.viewer:main',
+        ],
+    },
 )

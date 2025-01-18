@@ -1,0 +1,301 @@
+# Global Processing Configuration
+processing:
+  base_tolerance: 0.005
+  output_dir: "./tiger_processed"
+  parallel_downloads: 4
+  max_retries: 3
+  timeout: 300
+
+# Server Configuration
+servers:
+  ftp_host: "ftp2.census.gov"
+  https_host: "www2.census.gov"
+  base_path: "/geo/tiger/TIGER2023"
+
+layers:
+  # Relationship Tables (Non-spatial)
+
+  # Additional Relationship Tables
+  FACESAH:
+    description: "Additional Face Attributes - History"
+    enabled: false
+    layer_type: RELATIONSHIP
+
+  FACESAL:
+    description: "Additional Face Attributes - Legal"
+    enabled: false
+    layer_type: RELATIONSHIP
+
+  FACESMIL:
+    description: "Military Installation Face Attributes"
+    enabled: false
+    layer_type: RELATIONSHIP
+
+  TBG:
+    description: "Tribal Block Groups"
+    enabled: false
+    layer_type: RELATIONSHIP
+
+
+  ADDR:
+    description: "Address Range-Feature Name Relationships"
+    enabled: false
+    layer_type: RELATIONSHIP
+
+  ADDRFEAT:
+    description: "Address Range Features"
+    enabled: false
+    layer_type: RELATIONSHIP
+
+  ADDRFN:
+    description: "Address Range-Feature Name Relationships"
+    enabled: false
+    layer_type: RELATIONSHIP
+
+  FACES:
+    description: "Topological Faces (Polygons with Attributes)"
+    enabled: false
+    layer_type: RELATIONSHIP
+
+  # Point Features
+  POINTLM:
+    description: "Point Landmarks"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POINT
+    tolerance: 0.001
+
+  # Line Features
+  AITSN:
+    description: "American Indian Tribal Subdivision Boundaries"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYLINE
+
+  EDGES:
+    description: "All Lines (including roads, railroads, and hydrography)"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYLINE
+
+  INTERNATIONALBOUNDARY:
+    description: "International Boundaries"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYLINE
+
+  LINEARWATER:
+    description: "Linear Hydrography Features"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYLINE
+
+  PRIMARYROADS:
+    description: "Primary Roads (Interstate, US, and State Highways)"
+    enabled: true
+    layer_type: SPATIAL
+    geometry_type: POLYLINE
+
+  PRISECROADS:
+    description: "Primary and Secondary Roads Combined Layer"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYLINE
+
+  RAILS:
+    description: "Railways"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYLINE
+
+  ROADS:
+    description: "Primary and Secondary Roads"
+    enabled: true
+    layer_type: SPATIAL
+    geometry_type: POLYLINE
+    tolerance: 0.000001
+
+
+  # Polygon Features
+
+  ANRC:
+    description: "Alaska Native Regional Corporations"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  AREALM:
+    description: "Area Landmarks"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  AREAWATER:
+    description: "Area Water Features"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  ESTATE:
+    description: "Estate Boundaries - US Virgin Islands"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  SDADM:
+    description: "School District Administrative Areas"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  AIANNH:
+    description: "American Indian / Alaska Native / Native Hawaiian Areas"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  BG:
+    description: "Block Groups"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  CBSA:
+    description: "Core Based Statistical Areas (Metropolitan and Micropolitan)"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  CD:
+    description: "Congressional Districts"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  COASTLINE:
+    description: "Coastline of the United States"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  CONCITY:
+    description: "Consolidated Cities"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  COUNTY:
+    description: "Counties and Equivalent Areas"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+    tolerance: 0.003
+
+  COUSUB:
+    description: "County Subdivisions"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  CSA:
+    description: "Combined Statistical Areas"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  ELSD:
+    description: "Elementary School Districts"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  METDIV:
+    description: "Metropolitan Divisions"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  MIL:
+    description: "Military Installations"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  PLACE:
+    description: "Census Designated Places"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  PUMA:
+    description: "Public Use Microdata Areas"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  SCSD:
+    description: "Secondary School Districts"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  SLDL:
+    description: "State Legislative Districts - Lower Chamber"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  SLDU:
+    description: "State Legislative Districts - Upper Chamber"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  STATE:
+    description: "States and Equivalent Areas"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+    tolerance: 0.003
+
+  SUBBARRIO:
+    description: "Sub-Barrios (Puerto Rico)"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  TABBLOCK20:
+    description: "Census Blocks (2020)"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  TRACT:
+    description: "Census Tracts"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  TTRACT:
+    description: "Tribal Census Tracts"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  UAC:
+    description: "Urban Areas"
+    enabled: true
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  UNSD:
+    description: "Unified School Districts"
+    enabled: false
+    layer_type: SPATIAL
+    geometry_type: POLYGON
+
+  ZCTA520:
+    description: "ZIP Code Tabulation Areas (2020)"
+    enabled: true
+    layer_type: SPATIAL
+    geometry_type: POLYGON
