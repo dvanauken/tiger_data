@@ -1,67 +1,61 @@
-/* style.css */
-
-/* Style for the map container */
 #map {
   width: 100%;
-  height: 100vh; /* Full viewport height */
+  height: 100vh;
   overflow: hidden;
   position: relative;
 }
 
-/* Base style for all features */
 .feature {
   cursor: pointer;
   opacity: 0.8;
   transition: opacity 0.3s, stroke-width 0.3s;
 }
 
-/* Styles for <path> elements (Polygons and Lines) */
 path.feature {
-  /* Common styles for paths */
-  stroke: #000000; /* Black stroke */
+  stroke: #000000;
   stroke-width: 0.5px;
-}
-
-/* Specific styles for polygons */
-path.feature {
-  fill: #ff0000; /* Red fill for polygons */
+  fill: #ff0000;
 }
 
 path.feature:hover {
-  fill: #00ff00; /* Green fill on hover */
+  fill: #00ff00;
   opacity: 1;
 }
 
-/* Styles for <circle> elements (Points) */
 circle.feature {
-  fill: #0000ff; /* Blue fill for points */
-  stroke: #000000; /* Black stroke */
+  fill: #0000ff;
+  stroke: #000000;
   stroke-width: 0.5px;
 }
 
 circle.feature:hover {
-  fill: #00ffff; /* Cyan fill on hover */
+  fill: #00ffff;
   opacity: 1;
 }
 
-/* Dragging State Styles */
 #map.dragging {
   background-color: rgba(0, 0, 0, 0.05);
   border: 2px dashed #555;
 }
 
-/* Progress Overlay Styles */
 #progress-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
-  display: flex;
+  background-color: rgba(255, 255, 255, 0.8);
   align-items: center;
   justify-content: center;
-  z-index: 1000; /* Ensure it sits above other elements */
+  z-index: 1000;
+}
+
+.hidden {
+  display: none;
+}
+
+#progress-overlay:not(.hidden) {
+  display: flex;
 }
 
 .progress-container {
@@ -72,9 +66,4 @@ circle.feature:hover {
   width: 300px;
   height: 20px;
   margin-top: 10px;
-}
-
-/* Hidden class to hide the overlay */
-.hidden {
-  display: none;
 }

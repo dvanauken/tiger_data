@@ -3,25 +3,18 @@
 <head>
     <meta charset="utf-8">
     <title>TopoJSON Viewer</title>
-    <!-- D3.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
-    <!-- TopoJSON Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
-    <!-- External CSS -->
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
     <div id="map"></div>
-
-    <!-- Progress Overlay -->
     <div id="progress-overlay" class="hidden">
         <div class="progress-container">
             <p>Loading TopoJSON...</p>
             <progress id="progress-bar" value="0" max="100"></progress>
         </div>
     </div>
-    
-    <!-- External JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
