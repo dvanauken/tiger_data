@@ -11,8 +11,18 @@
     <div id="map"></div>
     <div id="progress-overlay" class="hidden">
         <div class="progress-container">
-            <p>Loading TopoJSON...</p>
-            <progress id="progress-bar" value="0" max="100"></progress>
+            <div class="progress-item">
+                <div id="file-label" class="progress-label">File Loading: 0%</div>
+                <progress id="file-progress" class="progress-bar" value="0" max="100"></progress>
+            </div>
+            <div class="progress-item">
+                <div id="parse-label" class="progress-label">Parsing TopoJSON: 0%</div>
+                <progress id="parse-progress" class="progress-bar" value="0" max="100"></progress>
+            </div>
+            <div class="progress-item">
+                <div id="render-label" class="progress-label">Rendering Features: 0%</div>
+                <progress id="render-progress" class="progress-bar" value="0" max="100"></progress>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>

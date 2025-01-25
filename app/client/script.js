@@ -9,20 +9,31 @@ const svg = d3.select("#map")
     .attr("xmlns", "http://www.w3.org/2000/svg")
     .attr("xmlns:xlink", "http://www.w3.org/1999/xlink");
 
-const progressOverlay = d3.select("#progress-overlay");
-const progressBar = d3.select("#progress-bar");
+let fileContent = '';
+let topology = null;
+let features = null;
 
-function showProgress() {
-    progressOverlay.classed("hidden", false);
-    progressBar.property("value", 0);
+function updateProgress(type, percent, text) {
+    d3.select(`#${type}-progress`)
+        .property("value", percent);
+    d3.select(`#${type}-label`)
+        .text(`${text}: ${Math.round(percent)}%`);
 }
 
-function updateProgress(percentage) {
-    progressBar.property("value", percentage);
-}
+async function processJSON(content, updateCallback) {
+    const chunkSize = 1024 * 1024;
+    const totalChunks = Math.ceil(content.length / chunkSize);
+    let processed = 0;
 
-function hideProgress() {
-    progressOverlay.classed("hidden", true);
+    for (let i = 0; i < totalChunks; i++) {
+        const start = i * chunkSize;
+        const end = Math.min(start + chunkSize, content.length);
+        processed = (i + 1) / totalChunks * 100;
+        updateCallback(processed);
+        await new Promise(resolve => setTimeout(resolve, 0));
+    }
+
+    return JSON.parse(content);
 }
 
 async function handleDrop(event) {
@@ -34,115 +45,78 @@ async function handleDrop(event) {
         return;
     }
 
-    showProgress();
+    d3.select("#progress-overlay").classed("hidden", false);
+    updateProgress("file", 0, "File Loading");
+    updateProgress("parse", 0, "Parsing TopoJSON");
+    updateProgress("render", 0, "Rendering Features");
 
-    const fileSize = file.size;
-    const chunkSize = 512 * 1024;
-    let totalProcessingTime = fileSize; // Initialize with file size
-    let currentProgress = 0;
-    let offset = 0;
-    let fileContent = '';
-    
-    const startTime = performance.now();
-
-    const readChunk = () => {
-        const chunk = file.slice(offset, offset + chunkSize);
-        const chunkReader = new FileReader();
-        
-        chunkReader.onload = async (e) => {
-            fileContent += e.target.result;
-            offset += e.target.result.length;
-            
-            // Update progress based on bytes read
-            currentProgress = (offset / fileSize) * 100;
-            updateProgress(currentProgress);
-            
-            if (offset < fileSize) {
-                readChunk();
-            } else {
-                try {
-                    const parseStart = performance.now();
-                    const topology = JSON.parse(fileContent);
-                    const parseTime = performance.now() - parseStart;
-                    
-                    const objectName = Object.keys(topology.objects)[0];
-                    const features = topojson.feature(topology, topology.objects[objectName]);
-                    
-                    const renderStart = performance.now();
-                    const projection = d3.geoMercator()
-                        .fitSize([width, height], features);
-
-                    const path = d3.geoPath()
-                        .projection(projection);
-
-                    svg.selectAll("*").remove();
-
-                    // Render paths
-                    const pathFeatures = features.features.filter(d => 
-                        d.geometry.type !== "Point" && d.geometry.type !== "MultiPoint"
-                    );
-                    
-                    let featuresProcessed = 0;
-                    const totalFeatures = pathFeatures.length;
-
-                    svg.selectAll("path")
-                        .data(pathFeatures)
-                        .join("path")
-                        .attr("class", "feature")
-                        .attr("d", path)
-                        .append("title")
-                        .text(d => {
-                            featuresProcessed++;
-                            const renderProgress = (featuresProcessed / totalFeatures) * 20;
-                            updateProgress(80 + renderProgress);
-                            return Object.entries(d.properties)
-                                .map(([key, value]) => `${key}: ${value}`)
-                                .join('\n');
-                        });
-
-                    // Render points
-                    const pointFeatures = features.features.filter(d => 
-                        d.geometry.type === "Point" || d.geometry.type === "MultiPoint"
-                    );
-
-                    svg.selectAll("circle")
-                        .data(pointFeatures)
-                        .join("circle")
-                        .attr("class", "feature")
-                        .attr("cx", d => projection(d.geometry.coordinates)[0])
-                        .attr("cy", d => projection(d.geometry.coordinates)[1])
-                        .attr("r", 4)
-                        .append("title")
-                        .text(d => Object.entries(d.properties)
-                            .map(([key, value]) => `${key}: ${value}`)
-                            .join('\n')
-                        );
-
-                    const totalTime = performance.now() - startTime;
-                    console.log(`File size: ${fileSize} bytes`);
-                    console.log(`Parse time: ${parseTime}ms`);
-                    console.log(`Total processing time: ${totalTime}ms`);
-
-                    setTimeout(hideProgress, 500);
-                } catch (error) {
-                    console.error("Error parsing TopoJSON:", error);
-                    alert("Failed to load the TopoJSON file. Please ensure it's valid.");
-                    hideProgress();
-                }
+    try {
+        // File Loading Phase
+        const reader = new FileReader();
+        reader.onprogress = (e) => {
+            if (e.lengthComputable) {
+                const percent = (e.loaded / e.total) * 100;
+                updateProgress("file", percent, "File Loading");
             }
         };
-        
-        chunkReader.onerror = function() {
-            console.error("Error reading chunk");
-            alert("An error occurred while reading the file.");
-            hideProgress();
-        };
-        
-        chunkReader.readAsText(chunk);
-    };
-    
-    updateProgress(0);
-    readChunk();
+
+        fileContent = await new Promise((resolve, reject) => {
+            reader.onload = e => resolve(e.target.result);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsText(file);
+        });
+
+        updateProgress("file", 100, "File Loading");
+
+        // Parsing Phase
+        topology = await processJSON(fileContent, (percent) => {
+            updateProgress("parse", percent, "Parsing TopoJSON");
+        });
+
+        const objectName = Object.keys(topology.objects)[0];
+        features = topojson.feature(topology, topology.objects[objectName]);
+
+        // Rendering Phase
+        const totalFeatures = features.features.length;
+        let renderedFeatures = 0;
+
+        const projection = d3.geoMercator().fitSize([width, height], features);
+        const path = d3.geoPath().projection(projection);
+
+        svg.selectAll("*").remove();
+
+        // Render features in chunks
+        const featureChunkSize = 100;
+        for (let i = 0; i < features.features.length; i += featureChunkSize) {
+            const chunk = features.features.slice(i, i + featureChunkSize);
+            
+            svg.selectAll(`path.feature-chunk-${i}`)
+                .data(chunk)
+                .join("path")
+                .attr("class", d => `feature feature-chunk-${i}`)
+                .attr("d", path)
+                .append("title")
+                .text(d => Object.entries(d.properties)
+                    .map(([key, value]) => `${key}: ${value}`)
+                    .join('\n')
+                );
+
+            renderedFeatures += chunk.length;
+            const renderPercent = (renderedFeatures / totalFeatures) * 100;
+            updateProgress("render", renderPercent, "Rendering Features");
+            
+            await new Promise(resolve => setTimeout(resolve, 0));
+        }
+
+        setTimeout(() => {
+            d3.select("#progress-overlay").classed("hidden", true);
+        }, 500);
+
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Error processing file");
+        d3.select("#progress-overlay").classed("hidden", true);
+    }
 }
 
 function handleDragOver(event) {
@@ -162,7 +136,6 @@ document.body.addEventListener("drop", function(event) {
 });
 
 window.addEventListener("resize", () => {
-    const newWidth = window.innerWidth;
-    const newHeight = window.innerHeight;
-    svg.attr("width", newWidth).attr("height", newHeight);
+    svg.attr("width", window.innerWidth)
+       .attr("height", window.innerHeight);
 });
