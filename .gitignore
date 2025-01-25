@@ -128,6 +128,7 @@ dmypy.json
 tiger_processed/**
 tiger_processed_001_20250107/**
 tiger_processed_20250115/**
+data/**
 tiger_processed/**
 
 result.*.txt

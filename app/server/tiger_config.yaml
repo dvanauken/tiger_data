@@ -1,7 +1,7 @@
 # Global Processing Configuration
 processing:
   base_tolerance: 0.005
-  output_dir: "./tiger_processed"
+  output_dir: "./data"
   parallel_downloads: 4
   max_retries: 3
   timeout: 300
@@ -80,7 +80,7 @@ layers:
 
   INTERNATIONALBOUNDARY:
     description: "International Boundaries"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYLINE
 
@@ -98,19 +98,19 @@ layers:
 
   PRISECROADS:
     description: "Primary and Secondary Roads Combined Layer"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYLINE
 
   RAILS:
     description: "Railways"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYLINE
 
   ROADS:
     description: "Primary and Secondary Roads"
-    enabled: true
+    enabled: false
     layer_type: SPATIAL
     geometry_type: POLYLINE
     tolerance: 0.000001
@@ -156,50 +156,50 @@ layers:
 
   BG:
     description: "Block Groups"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
 
   CBSA:
     description: "Core Based Statistical Areas (Metropolitan and Micropolitan)"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
 
   CD:
     description: "Congressional Districts"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
 
   COASTLINE:
     description: "Coastline of the United States"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
 
   CONCITY:
     description: "Consolidated Cities"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
 
   COUNTY:
     description: "Counties and Equivalent Areas"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
     tolerance: 0.003
 
   COUSUB:
     description: "County Subdivisions"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
 
   CSA:
     description: "Combined Statistical Areas"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
 
@@ -211,25 +211,25 @@ layers:
 
   METDIV:
     description: "Metropolitan Divisions"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
 
   MIL:
     description: "Military Installations"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
 
   PLACE:
     description: "Census Designated Places"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
 
   PUMA:
     description: "Public Use Microdata Areas"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
 
@@ -241,19 +241,19 @@ layers:
 
   SLDL:
     description: "State Legislative Districts - Lower Chamber"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
 
   SLDU:
     description: "State Legislative Districts - Upper Chamber"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
 
   STATE:
     description: "States and Equivalent Areas"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
     tolerance: 0.003
@@ -266,13 +266,13 @@ layers:
 
   TABBLOCK20:
     description: "Census Blocks (2020)"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
 
   TRACT:
     description: "Census Tracts"
-    enabled: false
+    enabled: true
     layer_type: SPATIAL
     geometry_type: POLYGON
 
@@ -296,6 +296,6 @@ layers:
 
   ZCTA520:
     description: "ZIP Code Tabulation Areas (2020)"
-    enabled: true
+    enabled: false
     layer_type: SPATIAL
     geometry_type: POLYGON

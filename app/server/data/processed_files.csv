@@ -1,0 +1,5 @@
+directory,filename,status,timestamp,protocol
+COASTLINE,tl_2023_us_coastline.zip,error: 'TigerProcessor' object has no attribute '_process_spatial_file',2025-01-18 20:02:37,FTP
+STATE,tl_2023_us_state.zip,error: 'TigerProcessor' object has no attribute '_process_spatial_file',2025-01-18 20:02:37,FTP
+COASTLINE,tl_2023_us_coastline.zip,success,2025-01-18 20:08:50,FTP
+STATE,tl_2023_us_state.zip,success,2025-01-18 20:09:12,FTP

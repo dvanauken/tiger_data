@@ -1,3 +1,8 @@
+
+##
+python -m app.services.processor 
+pip install -e .
+
 # TIGER/Line Roads Data Downloader
 
 A Python utility for downloading U.S. Census TIGER/Line road shapefiles.

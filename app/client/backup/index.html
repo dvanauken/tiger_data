@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>TopoJSON Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <!-- Optional: Inline styles for testing -->
+    <!--
+    <style>
+        .feature {
+            fill: #ff0000;
+            stroke: #000000;
+        }
+    </style>
+    -->
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        const svg = d3.select("#map")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("version", "1.1")
+            .attr("xmlns", "http://www.w3.org/2000/svg")
+            .attr("xmlns:xlink", "http://www.w3.org/1999/xlink");
+
+        function handleDrop(event) {
+            event.preventDefault();
+            const file = event.dataTransfer.files[0];
+            if (!file.name.endsWith('.topojson')) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const topology = JSON.parse(e.target.result);
+                const objectName = Object.keys(topology.objects)[0];
+                const features = topojson.feature(topology, topology.objects[objectName]);
+
+                const projection = d3.geoMercator()
+                    .fitSize([width, height], features);
+
+                const path = d3.geoPath()
+                    .projection(projection);
+
+                svg.selectAll("*").remove();
+                svg.selectAll("path")
+                    .data(features.features)
+                    .join("path")
+                    .attr("class", "feature")
+                    //.attr("style", "enable-background:new") // Removed for styling purposes
+                    .attr("d", path)
+                    .append("title")
+                    .text(d => {
+                        const props = Object.entries(d.properties)
+                            .map(([key, value]) => `${key}: ${value}`)
+                            .join('\n');
+                        return props;
+                    });
+            };
+            reader.readAsText(file);
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+        }
+
+        document.body.addEventListener("dragover", handleDragOver);
+        document.body.addEventListener("drop", handleDrop);
+    </script>
+</body>
+</html>

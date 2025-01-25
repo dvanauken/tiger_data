@@ -1,0 +1,94 @@
+/* style.css */
+
+/* ====================================================
+   General SVG Styles
+   ==================================================== */
+   body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+#map {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+svg {
+    width: 100%;
+    height: 100%;
+    background-color: #f9f9f9; /* Light background for better contrast */
+}
+
+/* ====================================================
+   SVG Element Styles
+   ==================================================== */
+
+/* Paths: Used for Lines and Polygons */
+path {
+    fill: none; /* No fill by default */
+    stroke: #555555; /* Default stroke color */
+    stroke-width: 1; /* Default stroke width */
+    opacity: 0.7; /* Slight transparency */
+    transition: stroke 0.3s, stroke-width 0.3s, opacity 0.3s;
+}
+
+/* Hover Effect for Paths */
+path:hover {
+    stroke: #ff6600; /* Orange stroke on hover */
+    stroke-width: 2; /* Thicker stroke on hover */
+    opacity: 1; /* Fully opaque on hover */
+}
+
+/* Polygons: Override Path Styles for Filled Shapes */
+path.polygon {
+    fill: #a8ddb5; /* Light green fill for polygons */
+    stroke: #238b45; /* Dark green stroke for polygons */
+}
+
+/* Hover Effect for Polygons */
+path.polygon:hover {
+    fill: #78c679; /* Darker green fill on hover */
+    stroke: #006d2c; /* Darker green stroke on hover */
+}
+
+/* Lines: Override Path Styles for Line Features */
+path.line {
+    stroke: #08519c; /* Blue stroke for lines */
+    stroke-width: 1.5;
+}
+
+/* Hover Effect for Lines */
+path.line:hover {
+    stroke: #08306b; /* Darker blue on hover */
+    stroke-width: 2.5;
+}
+
+/* Points: Rendered as Circles */
+circle {
+    fill: #fc9272; /* Light red fill for points */
+    stroke: #de2d26; /* Dark red stroke for points */
+    stroke-width: 1;
+    opacity: 0.9;
+    transition: fill 0.3s, stroke 0.3s, opacity 0.3s;
+}
+
+/* Hover Effect for Points */
+circle:hover {
+    fill: #fb6a4a; /* Darker red fill on hover */
+    stroke: #cb181d; /* Darker red stroke on hover */
+    opacity: 1;
+}
+
+/* Tooltip Styling */
+title {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+/* Cursor Change on Hover */
+path:hover, circle:hover {
+    cursor: pointer;
+}
+

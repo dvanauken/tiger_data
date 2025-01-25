@@ -256,44 +256,42 @@ class CodeString:
 
 if __name__ == "__main__":
     # Get root level files
-    paths = CodeString.explore(".", includeFileContent=False, debug=True)
-    paths.comment("File system")
+    paths = CodeString.explore(".", includeFileContent=True, debug=True)
+    paths.comment("Project name: tiger_data")
     paths.comment("===================================================================================================")
-    paths.comment("Note: ")
+    paths.comment("Source code")
     paths.comment("---------------------------------------------------------------------------------------------------")
-    paths.comment("This directory: ")
-    paths.comment("  tiger_processed/ROADS/ directory ")
-    paths.comment("Contains tiles (in the form of files) that are named like this: ")
-    paths.comment("    tl_2023_01001_roads.{geohash}.topojson")
-    paths.comment("  ex)")
-    paths.comment("    tl_2023_01001_roads.djf2g.topojson")
-    paths.comment("However, they are not listed here, bc there are over 3,200+ files and the need to constrain context")
-    paths.comment("===================================================================================================")
     paths.include("**/*") \
         .exclude("__pycache__/**") \
-        .exclude(".venv/**") \
+        .exclude("venv/**") \
         .exclude("dist/**") \
         .exclude("build/**") \
-        .exclude("tiger_processed/ROADS/*.topojson") \
+        .exclude("data/**") \
+        .exclude("data/logs/**") \
+        .exclude("tiger_processed/**") \
+        .exclude("result.*.txt")\
         .generate()
 
-    # Get configuration files
-    paths.comment("Config files")
-    paths.comment("===================================================================================================")
-    paths = CodeString.explore(".", includeFileContent=True, debug=True)
-    paths.include("*.json") \
-        .include("*.ini") \
-        .include("*.yaml") \
-        .include("requirements.txt") \
-        .include("setup.py") \
-        .include("project.toml") \
-        .generate()
+    # # Get configuration files
+    # paths = CodeString.explore(".", includeFileContent=True, debug=True)
+    # paths.comment("Config files")
+    # paths.comment("---------------------------------------------------------------------------------------------------")
+    # paths.include("*.json") \
+    #     .include("*.ini") \
+    #     .include("*.yaml") \
+    #     .include("requirements.txt") \
+    #     .include("setup.py") \
+    #     .include("project.toml") \
+    #     .exclude("venv/**") \
+    #     .generate()
 
-    # Get Python source files
-    paths.comment("Python source files")
-    paths.comment("===================================================================================================")
-    paths = CodeString.explore(".", includeFileContent=True, debug=True)
-    paths.include("**/*.py") \
-        .generate()
+    # # Get Python source files
+    # paths = CodeString.explore(".", includeFileContent=True, debug=True)
+    # paths.comment("Python source files")
+    # paths.comment("---------------------------------------------------------------------------------------------------")
+    # paths\
+    #     .include("**/*.py") \
+    #     .exclude("venv/**") \
+    #     .generate()
 
 
