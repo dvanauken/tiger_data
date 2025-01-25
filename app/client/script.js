@@ -25,6 +25,7 @@ function zoomed(event) {
 let fileContent = '';
 let topology = null;
 let features = null;
+let activeFeatures = new Map();
 
 function updateProgress(type, percent, text) {
     d3.select(`#${type}-progress`)
@@ -34,7 +35,7 @@ function updateProgress(type, percent, text) {
 }
 
 async function processJSON(content, updateCallback) {
-    const chunkSize = 512 * 1024;
+    const chunkSize = 1024 * 1024;
     const totalChunks = Math.ceil(content.length / chunkSize);
     let processed = 0;
 
@@ -64,7 +65,6 @@ async function handleDrop(event) {
     updateProgress("render", 0, "Rendering Features");
 
     try {
-        // File Loading Phase
         const reader = new FileReader();
         reader.onprogress = (e) => {
             if (e.lengthComputable) {
@@ -81,32 +81,74 @@ async function handleDrop(event) {
 
         updateProgress("file", 100, "File Loading");
 
-        // Parsing Phase
         topology = await processJSON(fileContent, (percent) => {
             updateProgress("parse", percent, "Parsing TopoJSON");
         });
 
         const objectName = Object.keys(topology.objects)[0];
         features = topojson.feature(topology, topology.objects[objectName]);
+        
+        // Store features with a unique ID
+        const layerId = Date.now().toString();
+        activeFeatures.set(layerId, features);
 
-        // Rendering Phase
-        const totalFeatures = features.features.length;
-        let renderedFeatures = 0;
+        await renderFeatures();
 
-        const projection = d3.geoMercator().fitSize([width, height], features);
-        const path = d3.geoPath().projection(projection);
+        setTimeout(() => {
+            d3.select("#progress-overlay").classed("hidden", true);
+        }, 500);
 
-        svg.selectAll("*").remove();
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Error processing file");
+        d3.select("#progress-overlay").classed("hidden", true);
+    }
+}
 
-        // Render features in chunks
+async function renderFeatures() {
+    svg.selectAll("*").remove();
+
+    // Calculate bounds for all active feature sets
+    let combinedBounds = null;
+    activeFeatures.forEach(features => {
+        const bounds = d3.geoBounds(features);
+        if (!combinedBounds) {
+            combinedBounds = bounds;
+        } else {
+            combinedBounds = [
+                [Math.min(bounds[0][0], combinedBounds[0][0]), Math.min(bounds[0][1], combinedBounds[0][1])],
+                [Math.max(bounds[1][0], combinedBounds[1][0]), Math.max(bounds[1][1], combinedBounds[1][1])]
+            ];
+        }
+    });
+
+    const projection = d3.geoMercator().fitSize([width, height], {
+        type: "Feature",
+        geometry: {
+            type: "LineString",
+            coordinates: combinedBounds
+        }
+    });
+
+    const path = d3.geoPath().projection(projection);
+
+    let totalFeatures = 0;
+    activeFeatures.forEach(features => {
+        totalFeatures += features.features.length;
+    });
+
+    let renderedFeatures = 0;
+
+    // Render all active feature sets
+    for (const [layerId, features] of activeFeatures) {
         const featureChunkSize = 100;
         for (let i = 0; i < features.features.length; i += featureChunkSize) {
             const chunk = features.features.slice(i, i + featureChunkSize);
             
-            svg.selectAll(`path.feature-chunk-${i}`)
+            svg.selectAll(`path.feature-chunk-${layerId}-${i}`)
                 .data(chunk)
                 .join("path")
-                .attr("class", d => `feature feature-chunk-${i}`)
+                .attr("class", d => `feature feature-chunk-${layerId}-${i}`)
                 .attr("d", path)
                 .attr("vector-effect", "non-scaling-stroke")
                 .append("title")
@@ -121,15 +163,6 @@ async function handleDrop(event) {
             
             await new Promise(resolve => setTimeout(resolve, 0));
         }
-
-        setTimeout(() => {
-            d3.select("#progress-overlay").classed("hidden", true);
-        }, 500);
-
-    } catch (error) {
-        console.error("Error:", error);
-        alert("Error processing file");
-        d3.select("#progress-overlay").classed("hidden", true);
     }
 }
 

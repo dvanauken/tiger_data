@@ -19,11 +19,12 @@
 path.feature {
   stroke: #000000;
   stroke-width: 0.5px;
-  fill: #ff0000;
+  fill: none;
 }
 
 path.feature:hover {
-  fill: #00ff00;
+  stroke: #00ff00;
+  stroke-width: 1;
   opacity: 1;
 }
 
