@@ -3,6 +3,11 @@
   height: 100vh;
   overflow: hidden;
   position: relative;
+  cursor: grab;
+}
+
+#map:active {
+  cursor: grabbing;
 }
 
 .feature {
@@ -14,7 +19,7 @@
 path.feature {
   stroke: #000000;
   stroke-width: 0.5px;
-  fill: none;
+  fill: #ff0000;
 }
 
 path.feature:hover {

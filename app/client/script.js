@@ -9,6 +9,19 @@ const svg = d3.select("#map")
     .attr("xmlns", "http://www.w3.org/2000/svg")
     .attr("xmlns:xlink", "http://www.w3.org/1999/xlink");
 
+const zoom = d3.zoom()
+    .scaleExtent([1, 512])
+    .on("zoom", zoomed);
+
+svg.call(zoom);
+
+function zoomed(event) {
+    svg.selectAll("path")
+        .attr("transform", event.transform);
+    svg.selectAll("circle")
+        .attr("transform", event.transform);
+}
+
 let fileContent = '';
 let topology = null;
 let features = null;
@@ -21,7 +34,7 @@ function updateProgress(type, percent, text) {
 }
 
 async function processJSON(content, updateCallback) {
-    const chunkSize = 1024 * 1024;
+    const chunkSize = 512 * 1024;
     const totalChunks = Math.ceil(content.length / chunkSize);
     let processed = 0;
 
@@ -95,6 +108,7 @@ async function handleDrop(event) {
                 .join("path")
                 .attr("class", d => `feature feature-chunk-${i}`)
                 .attr("d", path)
+                .attr("vector-effect", "non-scaling-stroke")
                 .append("title")
                 .text(d => Object.entries(d.properties)
                     .map(([key, value]) => `${key}: ${value}`)
